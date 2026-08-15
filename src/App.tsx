@@ -6,6 +6,8 @@ import { useStore } from './lib/store'
 import { useTheme } from './lib/theme'
 import Avatar from './components/Avatar'
 import Confetti from './components/Confetti'
+import PointsRules from './components/PointsRules'
+import RulesSheet from './components/RulesSheet'
 import StepSheet from './components/StepSheet'
 import Board from './views/Board'
 import Bulk from './views/Bulk'
@@ -32,6 +34,7 @@ export default function App() {
     return PARTICIPANTS.some((p) => p.id === v) ? v : null
   })
   const [sheet, setSheet] = useState<{ p: Participant; day: string } | null>(null)
+  const [showRules, setShowRules] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [burst, setBurst] = useState(0)
   const [, setTick] = useState(0)
@@ -72,6 +75,13 @@ export default function App() {
         <h1 className="flex-1 text-[17px] font-bold tracking-tight">
           Step Squad <span aria-hidden="true">👟</span>
         </h1>
+        <button
+          onClick={() => setShowRules(true)}
+          className="flex items-center gap-1 rounded-full border px-2.5 py-1.5 text-[12.5px] font-semibold text-accent hairline"
+          style={{ borderColor: 'var(--accent)' }}
+        >
+          <span aria-hidden="true">ℹ️</span> Points
+        </button>
         <button
           onClick={cycle}
           className="grid h-9 w-9 place-items-center rounded-full border text-[15px] hairline"
@@ -149,6 +159,8 @@ export default function App() {
         </ul>
       </nav>
 
+      {showRules && <RulesSheet onClose={() => setShowRules(false)} />}
+
       {sheet && (
         <StepSheet
           p={sheet.p}
@@ -210,6 +222,13 @@ function NamePicker({ onPick, mode }: { onPick: (id: number) => void; mode: 'lig
         <p className="mt-5 text-center text-[12px] text-muted">
           Just so we know whose row to highlight. You can log for anyone.
         </p>
+
+        <div className="card mt-6 p-4">
+          <h2 className="mb-3 flex items-center gap-1.5 text-[14px] font-bold">
+            <span aria-hidden="true">🏆</span> How points work
+          </h2>
+          <PointsRules />
+        </div>
       </div>
     </div>
   )

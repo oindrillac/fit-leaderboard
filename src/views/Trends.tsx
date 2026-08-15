@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
-import { fmt, prettyDay, TIERS } from '../lib/challenge'
+import { fmt, prettyDay } from '../lib/challenge'
 import { cumulativeSeries, dailyTotals, squadStats, type Standing } from '../lib/stats'
 import type { Entry } from '../lib/store'
 import type { Mode } from '../lib/theme'
 import Avatar from '../components/Avatar'
 import DailyBars from '../components/charts/DailyBars'
 import Heatmap, { RAMP_LEGEND, RampSwatch } from '../components/charts/Heatmap'
+import PointsRules from '../components/PointsRules'
 import RaceChart from '../components/charts/RaceChart'
 
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -148,23 +149,7 @@ export default function Trends({
 
       <section className="card p-4">
         <h2 className="mb-3 text-[15px] font-bold">How points work</h2>
-        <ul className="space-y-2">
-          {[...TIERS].reverse().map((t) => (
-            <li key={t.key} className="flex items-center gap-2.5 text-[13.5px]">
-              <span className="text-base" aria-hidden="true">
-                {t.emoji}
-              </span>
-              <span className="flex-1 text-ink-2">
-                <b className="text-ink">{t.label}</b> · {t.blurb}
-              </span>
-              <span className="font-bold tnum">{t.points}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-3 border-t pt-3 text-[12px] text-muted hairline">
-          The 12k and 20k bonuses stack on the 8k tier, so a 20,000-step day is worth 20.
-          Days reset at midnight IST.
-        </p>
+        <PointsRules />
       </section>
     </div>
   )
