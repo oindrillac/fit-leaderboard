@@ -1,4 +1,4 @@
-import { ALL_DAYS, elapsedDays, pointsFor, today } from './challenge'
+import { ALL_DAYS, elapsedDays, isChallengeComplete, pointsFor, STEP_CHAMPION_BONUS, today } from './challenge'
 import { PARTICIPANTS, type Participant } from './participants'
 import { key, type Entry } from './store'
 
@@ -21,6 +21,8 @@ export type Standing = {
   longestStreak: number
   cells: DayCell[]
   rank: number
+  /** Currently has (one of) the most total steps in the full-window standings. */
+  stepChampion: boolean
 }
 
 /** A day counts toward a streak if it actually scored. 2,000 steps is a gap. */
@@ -51,6 +53,7 @@ function longestStreak(cells: DayCell[]): number {
 export function buildStandings(
   entries: Map<string, Entry>,
   days: string[] = elapsedDays(),
+  opts: { champion?: boolean } = {},
 ): Standing[] {
   const rows = PARTICIPANTS.map((participant) => {
     const cells: DayCell[] = days.map((day) => {
@@ -82,8 +85,24 @@ export function buildStandings(
       longestStreak: longestStreak(cells),
       cells,
       rank: 0,
+      stepChampion: false,
     }
   })
+
+  // The total-steps bonus only applies to the full-window standings, and only
+  // pays out once the challenge is actually over — before that it's just a
+  // "who's currently ahead" indicator, not points anyone can bank on.
+  if (opts.champion) {
+    const maxSteps = Math.max(0, ...rows.map((r) => r.steps))
+    if (maxSteps > 0) {
+      for (const r of rows) {
+        if (r.steps === maxSteps) {
+          r.stepChampion = true
+          if (isChallengeComplete()) r.points += STEP_CHAMPION_BONUS
+        }
+      }
+    }
+  }
 
   // Points first; total steps breaks ties, then days logged. Ties share a rank.
   rows.sort((a, b) => b.points - a.points || b.steps - a.steps || b.daysLogged - a.daysLogged)

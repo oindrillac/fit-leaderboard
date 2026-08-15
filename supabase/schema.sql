@@ -16,7 +16,8 @@ insert into public.participants (id, name, emoji) values
   (4, 'Sweta',     '☀️'),
   (5, 'Oindrilla', '🌸'),
   (6, 'Fatima',    '🍀'),
-  (7, 'Nehali',    '🔮')
+  (7, 'Nehali',    '🔮'),
+  (8, 'Sajal',     '⭐')
 on conflict (id) do update set name = excluded.name, emoji = excluded.emoji;
 
 -- ------------------------------------------------------------- the entries
@@ -50,7 +51,7 @@ create table if not exists public.entries (
 create index if not exists entries_day_idx on public.entries (day);
 
 -- ---------------------------------------------------------------- access
--- Open by design: seven friends, one shared link, no passwords. Anyone with
+-- Open by design: the squad, one shared link, no passwords. Anyone with
 -- the URL can read and write. If that ever stops feeling right, replace the
 -- write policies below with ones gated on a shared passcode.
 

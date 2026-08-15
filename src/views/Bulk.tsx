@@ -177,7 +177,7 @@ export default function Bulk({
                   className="rounded-full border px-2.5 py-1 text-[12px] hairline tnum"
                   style={day === g.day ? { borderColor: 'var(--accent)', color: 'var(--accent)' } : undefined}
                 >
-                  {prettyDay(g.day)} · {g.count}/7
+                  {prettyDay(g.day)} · {g.count}/{PARTICIPANTS.length}
                 </button>
               ))}
             </div>

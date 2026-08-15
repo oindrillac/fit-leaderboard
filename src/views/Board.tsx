@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { elapsedDays, fmt, today } from '../lib/challenge'
+import { elapsedDays, fmt, isChallengeComplete, STEP_CHAMPION_BONUS, today } from '../lib/challenge'
 import { buildStandings } from '../lib/stats'
 import type { Entry } from '../lib/store'
 import type { Mode } from '../lib/theme'
@@ -30,7 +30,7 @@ export default function Board({
   const standings = useMemo(() => {
     const all = elapsedDays()
     const days = range === 'today' ? [today()] : range === 'week' ? all.slice(-7) : all
-    return buildStandings(entries, days)
+    return buildStandings(entries, days, { champion: range === 'all' })
   }, [entries, range])
 
   const anyPoints = standings.some((s) => s.points > 0)
@@ -38,6 +38,7 @@ export default function Board({
   // Visual podium order: 2nd, 1st, 3rd
   const podiumOrder = [podium[1], podium[0], podium[2]].filter(Boolean)
   const leaderPoints = standings[0]?.points ?? 0
+  const champions = range === 'all' ? standings.filter((s) => s.stepChampion) : []
 
   return (
     <div className="space-y-4">
@@ -58,6 +59,24 @@ export default function Board({
           </button>
         ))}
       </div>
+
+      {champions.length > 0 && (
+        <section className="card animate-pop flex items-center gap-3 p-4">
+          <span className="text-2xl" aria-hidden="true">
+            👣
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13.5px] font-bold leading-tight">
+              {champions.map((c) => c.participant.name).join(' & ')}{' '}
+              {champions.length > 1 ? 'are' : 'is'} leading on total steps
+            </p>
+            <p className="text-[12px] text-muted tnum">
+              {fmt(champions[0].steps)} steps · +{STEP_CHAMPION_BONUS} bonus{' '}
+              {isChallengeComplete() ? 'awarded' : 'if it holds through Sep 15'}
+            </p>
+          </div>
+        </section>
+      )}
 
       {!anyPoints ? (
         <section className="card animate-pop p-8 text-center">
@@ -138,10 +157,20 @@ export default function Board({
                   <div className="flex items-center gap-2.5">
                     <Avatar p={s.participant} mode={mode} size={32} />
                     <div className="min-w-0">
-                      <p className="truncate text-[14px] font-semibold">{s.participant.name}</p>
+                      <p className="truncate text-[14px] font-semibold">
+                        {s.participant.name}
+                        {s.stepChampion && (
+                          <span className="ml-1" title="Most total steps" aria-hidden="true">
+                            👣
+                          </span>
+                        )}
+                      </p>
                       <p className="text-[11.5px] text-muted tnum">
                         {s.daysLogged}/{s.daysPossible} days
                         {s.streak > 1 && ` · 🔥${s.streak}`}
+                        {s.stepChampion && (
+                          <span className="sr-only"> · leading on total steps</span>
+                        )}
                       </p>
                     </div>
                   </div>

@@ -52,10 +52,15 @@ export default function Today({
           >
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${(logged.length / 7) * 100}%`, background: 'var(--accent)' }}
+              style={{
+                width: `${(logged.length / PARTICIPANTS.length) * 100}%`,
+                background: 'var(--accent)',
+              }}
             />
           </div>
-          <span className="text-[12px] font-semibold text-ink-2 tnum">{logged.length}/7 in</span>
+          <span className="text-[12px] font-semibold text-ink-2 tnum">
+            {logged.length}/{PARTICIPANTS.length} in
+          </span>
         </div>
 
         {missing.length > 0 && (

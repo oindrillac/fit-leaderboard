@@ -51,7 +51,10 @@ export default function App() {
     return () => clearTimeout(t)
   }, [toast])
 
-  const standings = useMemo(() => buildStandings(store.entries), [store.entries])
+  const standings = useMemo(
+    () => buildStandings(store.entries, undefined, { champion: true }),
+    [store.entries],
+  )
 
   const pickMe = useCallback((id: number) => {
     localStorage.setItem(ME_KEY, String(id))
@@ -104,8 +107,8 @@ export default function App() {
 
       {store.mode === 'local' && (
         <p className="mb-3 rounded-2xl border border-dashed px-3.5 py-2.5 text-[12.5px] text-ink-2 hairline">
-          <b>This device only.</b> Add your Supabase keys to share one live database across all
-          seven phones — see <code>SETUP.md</code>.
+          <b>This device only.</b> Add your Supabase keys to share one live database across
+          everyone's phones — see <code>SETUP.md</code>.
         </p>
       )}
 
@@ -201,7 +204,7 @@ function NamePicker({ onPick, mode }: { onPick: (id: number) => void; mode: 'lig
         </p>
         <h1 className="mt-3 text-[30px] font-bold leading-tight tracking-tight">Step Squad</h1>
         <p className="mt-1.5 text-[14px] text-ink-2">
-          32 days, seven of us, one leaderboard. Aug 15 → Sep 15.
+          32 days, {PARTICIPANTS.length} of us, one leaderboard. Aug 15 → Sep 15.
         </p>
         <p className="mt-6 text-[13px] font-semibold uppercase tracking-wide text-muted">
           Who are you?

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { fmt, prettyDay } from '../../lib/challenge'
+import { PARTICIPANTS } from '../../lib/participants'
 import { useMeasure } from '../../lib/useMeasure'
 import Tooltip from './Tooltip'
 
@@ -97,7 +98,9 @@ export default function DailyBars({ data }: { data: DayTotal[] }) {
         <Tooltip x={PAD.left + hover * slot + slot / 2} containerWidth={width}>
           <p className="font-semibold">{prettyDay(data[hover].day)}</p>
           <p className="text-ink-2 tnum">{fmt(data[hover].steps)} steps</p>
-          <p className="text-muted tnum">{data[hover].loggedBy} of 7 logged</p>
+          <p className="text-muted tnum">
+            {data[hover].loggedBy} of {PARTICIPANTS.length} logged
+          </p>
         </Tooltip>
       )}
     </div>

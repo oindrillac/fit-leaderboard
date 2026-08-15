@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { fmt, prettyDay } from '../lib/challenge'
+import { PARTICIPANTS } from '../lib/participants'
 import { cumulativeSeries, dailyTotals, squadStats, type Standing } from '../lib/stats'
 import type { Entry } from '../lib/store'
 import type { Mode } from '../lib/theme'
@@ -109,7 +110,7 @@ export default function Trends({
 
       <section className="card p-4">
         <h2 className="text-[15px] font-bold">Squad steps per day</h2>
-        <p className="mb-3 text-[12.5px] text-muted">All seven of us, added together</p>
+        <p className="mb-3 text-[12.5px] text-muted">All {PARTICIPANTS.length} of us, added together</p>
         <DailyBars data={totals} />
       </section>
 

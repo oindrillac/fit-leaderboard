@@ -1,4 +1,4 @@
-// The squad. Colors are the validated categorical slots 1-7 from the data-viz
+// The squad. Colors are the validated categorical slots 1-8 from the data-viz
 // palette (light + dark steps, each mode selected rather than auto-flipped).
 // A person's color is fixed to the person, never to their rank — and every
 // place a color appears, the name and emoji appear with it, so identity is
@@ -22,6 +22,7 @@ export const PARTICIPANTS: Participant[] = [
   { id: 5, name: 'Oindrilla', emoji: '🌸', light: '#e87ba4', dark: '#d55181' },
   { id: 6, name: 'Fatima', emoji: '🍀', light: '#008300', dark: '#008300' },
   { id: 7, name: 'Nehali', emoji: '🔮', light: '#4a3aa7', dark: '#9085e9' },
+  { id: 8, name: 'Sajal', emoji: '⭐', light: '#e34948', dark: '#e66767' },
 ]
 
 export const byId = new Map(PARTICIPANTS.map((p) => [p.id, p]))
