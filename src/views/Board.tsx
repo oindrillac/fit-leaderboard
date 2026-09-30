@@ -125,7 +125,7 @@ export default function Board({
                     className="mt-2 grid w-full place-items-center rounded-t-xl px-2"
                     style={{
                       height: h,
-                      background: `color-mix(in oklab, ${PLINTH[Math.min(place, 2)]} 22%, var(--surface))`,
+                      background: `color-mix(in oklab, ${PLINTH[Math.min(place, 2)]} 34%, var(--surface))`,
                       borderTop: `3px solid ${PLINTH[Math.min(place, 2)]}`,
                     }}
                   >

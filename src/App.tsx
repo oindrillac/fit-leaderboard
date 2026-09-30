@@ -149,8 +149,12 @@ export default function App() {
               <button
                 onClick={() => setTab(t.key)}
                 aria-current={tab === t.key ? 'page' : undefined}
-                className="flex w-full flex-col items-center gap-0.5 rounded-xl py-1.5 transition"
-                style={{ color: tab === t.key ? 'var(--accent)' : 'var(--ink-muted)' }}
+                className="mx-1.5 flex w-[calc(100%-0.75rem)] flex-col items-center gap-0.5 rounded-xl py-1.5 transition"
+                style={
+                  tab === t.key
+                    ? { color: 'var(--accent)', background: 'var(--accent-soft)' }
+                    : { color: 'var(--ink-muted)' }
+                }
               >
                 <span className="text-[19px] leading-none" aria-hidden="true">
                   {t.icon}

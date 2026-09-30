@@ -51,6 +51,13 @@ export function isInChallenge(day: string): boolean {
   return day >= START_DAY && day <= END_DAY
 }
 
+/** Today, clamped into the challenge window — what "Today" should default to
+ *  for logging/navigation before the challenge starts (or after it ends). */
+export function currentDay(): string {
+  const t = today()
+  return t < START_DAY ? START_DAY : t > END_DAY ? END_DAY : t
+}
+
 // ---------------------------------------------------------------- scoring
 
 export type Tier = {

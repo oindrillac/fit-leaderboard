@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { addDays, dayNumber, fmt, isInChallenge, pointsFor, relativeDay, today, TOTAL_DAYS } from '../lib/challenge'
+import { addDays, currentDay, dayNumber, fmt, isInChallenge, pointsFor, relativeDay, TOTAL_DAYS } from '../lib/challenge'
 import { PARTICIPANTS, type Participant } from '../lib/participants'
 import type { Standing } from '../lib/stats'
 import { key, type Entry } from '../lib/store'
@@ -20,7 +20,7 @@ export default function Today({
   me: number | null
   openSheet: (p: Participant, day: string) => void
 }) {
-  const t = today()
+  const t = currentDay()
   const yesterday = addDays(t, -1)
   const [day, setDay] = useState(t)
   const showYesterday = isInChallenge(yesterday)

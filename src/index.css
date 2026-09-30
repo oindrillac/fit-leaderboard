@@ -9,7 +9,7 @@
   color-scheme: light;
 
   --plane: #fef9f5;
-  --plane-2: #fdeef4;
+  --plane-2: #fbdfec;
   --surface: #ffffff;
   --surface-2: #f8f1ec;
   --surface-sunken: #efe4da;
@@ -47,7 +47,7 @@
     color-scheme: dark;
 
     --plane: #0d0b13;
-    --plane-2: #1c1220;
+    --plane-2: #26132a;
     --surface: #17141f;
     --surface-2: #211f2b;
     --surface-sunken: #0f0d16;
@@ -83,7 +83,7 @@
   color-scheme: dark;
 
   --plane: #0d0b13;
-  --plane-2: #1c1220;
+  --plane-2: #26132a;
   --surface: #17141f;
   --surface-2: #211f2b;
   --surface-sunken: #0f0d16;

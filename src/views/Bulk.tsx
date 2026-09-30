@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ALL_DAYS,
   addDays,
+  currentDay,
   dayNumber,
-  END_DAY,
   fmt,
   isInChallenge,
   pointsFor,
@@ -41,7 +41,7 @@ export default function Bulk({
   store: Store
   mode: Mode
 }) {
-  const [day, setDay] = useState(today)
+  const [day, setDay] = useState(currentDay)
   const [draft, setDraft] = useState<Record<number, string>>({})
   const [status, setStatus] = useState<string | null>(null)
   const [showPaste, setShowPaste] = useState(false)
@@ -151,13 +151,13 @@ export default function Bulk({
             type="date"
             value={day}
             min={START_DAY}
-            max={today() < END_DAY ? today() : END_DAY}
+            max={currentDay()}
             onChange={(e) => e.target.value && setDay(e.target.value)}
             className="flex-1 rounded-xl border bg-transparent px-3 py-2 text-[13px] hairline"
             aria-label="Pick a date"
           />
           <button
-            onClick={() => setDay(today())}
+            onClick={() => setDay(currentDay())}
             className="rounded-xl border px-3 py-2 text-[13px] font-semibold hairline"
           >
             Today

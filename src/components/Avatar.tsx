@@ -20,7 +20,7 @@ export default function Avatar({
         width: size,
         height: size,
         fontSize: size * 0.46,
-        background: `color-mix(in oklab, ${color} 16%, var(--surface))`,
+        background: `color-mix(in oklab, ${color} 34%, var(--surface))`,
         // 2px surface ring keeps adjacent avatars from bleeding into each other
         boxShadow: `0 0 0 2px var(--surface), 0 0 0 3.5px ${color}`,
         opacity: dim ? 0.45 : 1,
