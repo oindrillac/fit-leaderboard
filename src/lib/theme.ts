@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { Tier } from './challenge'
 import type { Participant } from './participants'
 
 export type Mode = 'light' | 'dark'
@@ -46,4 +47,20 @@ export function useTheme() {
 /** A participant's hue, stepped for the surface it's being drawn on. */
 export function colorOf(p: Participant, mode: Mode): string {
   return mode === 'dark' ? p.dark : p.light
+}
+
+/** Each scoring tier gets its own token — accent for the top tier, gold and
+ *  good stepping down, muted for a rest day — so a tier reads as a color, not
+ *  just a number, everywhere it shows up (chips, feedback, the rules list). */
+export function tierColor(tier: Tier): string {
+  switch (tier.key) {
+    case 'big':
+      return 'var(--accent)'
+    case 'great':
+      return 'var(--gold)'
+    case 'solid':
+      return 'var(--good)'
+    default:
+      return 'var(--ink-muted)'
+  }
 }

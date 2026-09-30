@@ -69,7 +69,7 @@ export default function Board({
             className="flex-1 rounded-full py-2 text-[13px] font-semibold transition"
             style={
               range === r.key
-                ? { background: 'var(--surface)', color: 'var(--ink)', boxShadow: '0 1px 3px rgba(0,0,0,.1)' }
+                ? { background: 'var(--accent)', color: 'var(--accent-ink)', boxShadow: '0 2px 6px rgba(0,0,0,.15)' }
                 : { color: 'var(--ink-muted)' }
             }
           >
@@ -79,7 +79,11 @@ export default function Board({
       </div>
 
       {monthlyLeaders.map((m) => (
-        <section key={m.label} className="card animate-pop flex items-center gap-3 p-4">
+        <section
+          key={m.label}
+          className="card animate-pop flex items-center gap-3 border-0 p-4"
+          style={{ background: 'linear-gradient(135deg, var(--accent-soft), var(--surface))' }}
+        >
           <span className="text-2xl" aria-hidden="true">
             📅
           </span>
@@ -88,7 +92,7 @@ export default function Board({
               {m.leaders.map((c) => c.participant.name).join(' & ')}{' '}
               {m.leaders.length > 1 ? 'are' : 'is'} leading {m.label}
             </p>
-            <p className="text-[12px] text-muted tnum">
+            <p className="text-[12px] font-semibold tnum" style={{ color: 'var(--accent)' }}>
               +{MONTHLY_CHAMPION_BONUS} bonus {m.complete ? 'awarded' : `if it holds through ${m.label}`}
             </p>
           </div>
@@ -113,10 +117,18 @@ export default function Board({
               const h = place === 0 ? 78 : place === 1 ? 58 : 44
               return (
                 <div key={s.participant.id} className="flex w-1/3 flex-col items-center">
-                  <span className="mb-1 text-xl" aria-hidden="true">
+                  <span className={place === 0 ? 'mb-1 text-2xl' : 'mb-1 text-xl'} aria-hidden="true">
                     {MEDAL[Math.min(place, 2)]}
                   </span>
-                  <Avatar p={s.participant} mode={mode} size={place === 0 ? 52 : 42} />
+                  <span
+                    style={
+                      place === 0
+                        ? { borderRadius: '9999px', boxShadow: `0 0 0 3px var(--surface), 0 0 14px color-mix(in oklab, var(--gold) 70%, transparent)` }
+                        : undefined
+                    }
+                  >
+                    <Avatar p={s.participant} mode={mode} size={place === 0 ? 52 : 42} />
+                  </span>
                   <p className="mt-1.5 max-w-full truncate text-[13px] font-bold">
                     {s.participant.name}
                   </p>
@@ -126,7 +138,7 @@ export default function Board({
                     style={{
                       height: h,
                       background: `color-mix(in oklab, ${PLINTH[Math.min(place, 2)]} 34%, var(--surface))`,
-                      borderTop: `3px solid ${PLINTH[Math.min(place, 2)]}`,
+                      borderTop: `${place === 0 ? 4 : 3}px solid ${PLINTH[Math.min(place, 2)]}`,
                     }}
                   >
                     <span className="text-[20px] font-bold leading-none tnum">{s.points}</span>

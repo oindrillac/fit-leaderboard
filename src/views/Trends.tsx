@@ -10,11 +10,23 @@ import Heatmap, { RAMP_LEGEND, RampSwatch } from '../components/charts/Heatmap'
 import PointsRules from '../components/PointsRules'
 import RaceChart from '../components/charts/RaceChart'
 
-function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
+function Tile({
+  label,
+  value,
+  sub,
+  color,
+}: {
+  label: string
+  value: string
+  sub?: string
+  color: string
+}) {
   return (
-    <div className="card p-3.5">
+    <div className="card overflow-hidden p-3.5" style={{ borderTop: `3px solid ${color}` }}>
       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</p>
-      <p className="mt-1 text-[22px] font-bold leading-none tracking-tight">{value}</p>
+      <p className="mt-1 text-[22px] font-extrabold leading-none tracking-tight" style={{ color }}>
+        {value}
+      </p>
       {sub && <p className="mt-1 truncate text-[11.5px] text-muted">{sub}</p>}
     </div>
   )
@@ -44,16 +56,19 @@ export default function Trends({
           label="Squad steps"
           value={fmt(stats.totalSteps)}
           sub={`${fmt(stats.totalPoints)} points banked`}
+          color="var(--accent)"
         />
         <Tile
           label="Days left"
           value={String(stats.daysRemaining)}
           sub={`${stats.daysElapsed} down`}
+          color="var(--gold)"
         />
         <Tile
           label="Logged"
           value={`${fillRate}%`}
           sub={`${stats.entriesLogged} of ${stats.entriesPossible} entries`}
+          color="var(--good)"
         />
         <Tile
           label="Best day"
@@ -65,6 +80,7 @@ export default function Trends({
                 )}`
               : 'no entries yet'
           }
+          color="var(--t3)"
         />
       </div>
 

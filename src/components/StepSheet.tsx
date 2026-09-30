@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { fmt, nextTier, pointsFor, relativeDay, tierFor } from '../lib/challenge'
 import type { Participant } from '../lib/participants'
 import type { Entry, Store } from '../lib/store'
-import { colorOf, type Mode } from '../lib/theme'
+import { colorOf, tierColor, type Mode } from '../lib/theme'
 import Avatar from './Avatar'
 
 export default function StepSheet({
@@ -34,6 +34,7 @@ export default function StepSheet({
   const tier = tierFor(steps)
   const next = nextTier(steps)
   const color = colorOf(p, mode)
+  const tierHue = tierColor(tier)
 
   useEffect(() => {
     const t = setTimeout(() => inputRef.current?.focus(), 120)
@@ -145,12 +146,15 @@ export default function StepSheet({
           ))}
         </div>
 
-        <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[var(--surface-2)] px-4 py-3">
+        <div
+          className="mt-4 flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors"
+          style={{ background: `color-mix(in oklab, ${tierHue} 16%, var(--surface-2))` }}
+        >
           <span className="text-2xl" aria-hidden="true">
             {tier.emoji}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-bold leading-tight">
+            <p className="text-[15px] font-bold leading-tight" style={{ color: tierHue }}>
               {points} {points === 1 ? 'point' : 'points'} · {tier.label}
             </p>
             <p className="truncate text-[13px] text-muted">

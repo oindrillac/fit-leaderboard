@@ -1,4 +1,5 @@
 import { MONTHLY_CHAMPION_BONUS, TIERS } from '../lib/challenge'
+import { tierColor } from '../lib/theme'
 
 export default function PointsRules() {
   return (
@@ -12,7 +13,9 @@ export default function PointsRules() {
             <span className="flex-1 text-ink-2">
               <b className="text-ink">{t.label}</b> · {t.blurb}
             </span>
-            <span className="font-bold tnum">{t.points}</span>
+            <span className="font-bold tnum" style={{ color: tierColor(t) }}>
+              {t.points}
+            </span>
           </li>
         ))}
         <li className="flex items-center gap-2.5 text-[13.5px]">
@@ -22,7 +25,9 @@ export default function PointsRules() {
           <span className="flex-1 text-ink-2">
             <b className="text-ink">Monthly champion</b> · most steps that calendar month
           </span>
-          <span className="font-bold tnum">+{MONTHLY_CHAMPION_BONUS}</span>
+          <span className="font-bold tnum" style={{ color: 'var(--accent)' }}>
+            +{MONTHLY_CHAMPION_BONUS}
+          </span>
         </li>
       </ul>
       <p className="mt-3 border-t pt-3 text-[12px] text-muted hairline">

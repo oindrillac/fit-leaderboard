@@ -49,7 +49,7 @@ export default function Today({
               className="flex-1 rounded-full py-2 text-[13px] font-semibold transition"
               style={
                 day === opt.d
-                  ? { background: 'var(--surface)', color: 'var(--ink)', boxShadow: '0 1px 3px rgba(0,0,0,.1)' }
+                  ? { background: 'var(--accent)', color: 'var(--accent-ink)', boxShadow: '0 2px 6px rgba(0,0,0,.15)' }
                   : { color: 'var(--ink-muted)' }
               }
             >
@@ -84,7 +84,7 @@ export default function Today({
               className="h-full rounded-full transition-all duration-500"
               style={{
                 width: `${(logged.length / PARTICIPANTS.length) * 100}%`,
-                background: 'var(--accent)',
+                background: 'linear-gradient(90deg, var(--accent), var(--gold))',
               }}
             />
           </div>
@@ -121,20 +121,32 @@ export default function Today({
                         </span>
                       )}
                     </span>
-                    <span className="mt-0.5 block truncate text-[12.5px] text-muted">
-                      {entry ? (
-                        <span className="tnum">{fmt(steps)} steps</span>
-                      ) : (
-                        `Tap to add${day === t ? '' : ` for ${relativeDay(day).toLowerCase()}`}`
+                    <span className="mt-0.5 flex items-center gap-1.5 truncate text-[12.5px] text-muted">
+                      <span className="truncate">
+                        {entry ? (
+                          <span className="tnum">{fmt(steps)} steps</span>
+                        ) : (
+                          `Tap to add${day === t ? '' : ` for ${relativeDay(day).toLowerCase()}`}`
+                        )}
+                        {entry?.screenshot_url && ' · 📷'}
+                      </span>
+                      {streak > 1 && (
+                        <span
+                          className="shrink-0 rounded-full px-1.5 py-0.5 text-[11px] font-bold tnum"
+                          style={{ background: 'color-mix(in oklab, var(--gold) 22%, var(--surface))', color: 'var(--gold)' }}
+                        >
+                          🔥 {streak}
+                        </span>
                       )}
-                      {streak > 1 && <span className="tnum"> · 🔥 {streak}-day streak</span>}
-                      {entry?.screenshot_url && ' · 📷'}
                     </span>
                   </span>
                   {entry ? (
                     <PointsChip steps={steps} points={pointsFor(steps)} />
                   ) : (
-                    <span className="rounded-full border border-dashed px-2.5 py-1 text-[13px] font-medium text-muted hairline">
+                    <span
+                      className="rounded-full border-2 border-dashed px-2.5 py-1 text-[13px] font-bold"
+                      style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
+                    >
                       add
                     </span>
                   )}

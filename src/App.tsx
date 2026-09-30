@@ -75,13 +75,21 @@ export default function App() {
   return (
     <div className="mx-auto min-h-dvh w-full max-w-[520px] px-4 pb-28 pt-[max(0.75rem,env(safe-area-inset-top))]">
       <header className="mb-4 flex items-center gap-2.5 pt-1">
-        <h1 className="flex-1 text-[17px] font-bold tracking-tight">
-          Step Squad <span aria-hidden="true">👟</span>
+        <h1
+          className="flex-1 text-[19px] font-extrabold tracking-tight"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, var(--accent), var(--gold))',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          Step Squad <span aria-hidden="true" style={{ WebkitTextFillColor: 'initial' }}>👟</span>
         </h1>
         <button
           onClick={() => setShowRules(true)}
-          className="flex items-center gap-1 rounded-full border px-2.5 py-1.5 text-[12.5px] font-semibold text-accent hairline"
-          style={{ borderColor: 'var(--accent)' }}
+          className="flex items-center gap-1 rounded-full px-2.5 py-1.5 text-[12.5px] font-bold"
+          style={{ background: 'var(--accent)', color: 'var(--accent-ink)' }}
         >
           <span aria-hidden="true">ℹ️</span> Points
         </button>
@@ -203,10 +211,20 @@ function NamePicker({ onPick, mode }: { onPick: (id: number) => void; mode: 'lig
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col justify-center px-6 py-10">
       <div className="animate-pop">
-        <p className="text-4xl" aria-hidden="true">
+        <p className="text-5xl" aria-hidden="true">
           👟
         </p>
-        <h1 className="mt-3 text-[30px] font-bold leading-tight tracking-tight">Step Squad</h1>
+        <h1
+          className="mt-3 text-[34px] font-extrabold leading-tight tracking-tight"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, var(--accent), var(--gold))',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          Step Squad
+        </h1>
         <p className="mt-1.5 text-[14px] text-ink-2">
           {ALL_DAYS.length} days, {PARTICIPANTS.length} of us, one leaderboard. Oct 1 → Dec 29.
         </p>
