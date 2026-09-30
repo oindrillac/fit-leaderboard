@@ -70,16 +70,8 @@ export const TIERS: Tier[] = [
   { key: 'none', label: 'Rest day', blurb: 'Under 8,000', min: 0, points: 0, emoji: '😴' },
 ]
 
-/** Whoever logs the most total steps across the whole window gets this, once it's over. */
-export const STEP_CHAMPION_BONUS = 15
-
 /** Whoever logs the most total steps in a calendar month gets this, once that month is over. */
 export const MONTHLY_CHAMPION_BONUS = 10
-
-/** True the day after the challenge window closes — the bonus locks in then. */
-export function isChallengeComplete(): boolean {
-  return today() > END_DAY
-}
 
 export const MAX_DAILY_POINTS = 20
 

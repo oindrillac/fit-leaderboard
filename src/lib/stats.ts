@@ -1,12 +1,10 @@
 import {
   ALL_DAYS,
   elapsedDays,
-  isChallengeComplete,
   isMonthComplete,
   MONTHLY_CHAMPION_BONUS,
   MONTHS,
   pointsFor,
-  STEP_CHAMPION_BONUS,
   today,
 } from './challenge'
 import { PARTICIPANTS, type Participant } from './participants'
@@ -31,8 +29,6 @@ export type Standing = {
   longestStreak: number
   cells: DayCell[]
   rank: number
-  /** Currently has (one of) the most total steps in the full-window standings. */
-  stepChampion: boolean
   /** Calendar months where they currently lead (or have locked in) the most steps. */
   monthlyChampionships: { key: string; label: string; complete: boolean }[]
 }
@@ -108,27 +104,14 @@ export function buildStandings(
       longestStreak: longestStreak(cells),
       cells,
       rank: 0,
-      stepChampion: false,
       monthlyChampionships: [] as Standing['monthlyChampionships'],
     }
   })
 
-  // The total-steps bonus only applies to the full-window standings, and only
-  // pays out once the challenge is actually over — before that it's just a
-  // "who's currently ahead" indicator, not points anyone can bank on.
+  // The monthly bonus only applies to the full-window standings — each calendar
+  // month has its own max-steps bonus, based on that month's own days (not
+  // whatever slice the table shows).
   if (opts.champion) {
-    const maxSteps = Math.max(0, ...rows.map((r) => r.steps))
-    if (maxSteps > 0) {
-      for (const r of rows) {
-        if (r.steps === maxSteps) {
-          r.stepChampion = true
-          if (isChallengeComplete()) r.points += STEP_CHAMPION_BONUS
-        }
-      }
-    }
-
-    // Same idea, one month at a time — each calendar month has its own max-steps
-    // bonus, based on that month's own days (not whatever slice the table shows).
     for (const month of MONTHS) {
       const elapsed = month.days.filter((d) => d <= today())
       if (elapsed.length === 0) continue

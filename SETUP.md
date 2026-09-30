@@ -64,8 +64,7 @@ Everyday count — nothing below 8,000.
 | 10,000+ | 15 |
 | 12,000+ | 20 |
 
-Bonuses: **+10** to whoever logs the most total steps in a calendar month (Oct, Nov, Dec each
-pay out separately), and **+15** to whoever logs the most total steps across the whole
-challenge. Ties get the bonus too.
+Bonus: **+10** to whoever logs the most total steps in a calendar month (Oct, Nov, Dec each pay
+out separately). Ties get the bonus too.
 
 Challenge window: **Oct 1 – Dec 29, 2026** (90 days), day boundary at midnight IST.

@@ -8,24 +8,24 @@
 :root {
   color-scheme: light;
 
-  --plane: #fdf8f3;
-  --plane-2: #f6eef6;
-  --surface: #fffdfa;
-  --surface-2: #f7f2ec;
-  --surface-sunken: #f1ebe4;
+  --plane: #fef9f5;
+  --plane-2: #fdeef4;
+  --surface: #ffffff;
+  --surface-2: #f8f1ec;
+  --surface-sunken: #efe4da;
 
-  --ink: #1a1714;
-  --ink-2: #57514b;
-  --ink-muted: #8b837b;
+  --ink: #140f0b;
+  --ink-2: #4a423b;
+  --ink-muted: #83786d;
 
-  --line: rgba(26, 23, 20, 0.09);
-  --grid: #ece5dc;
-  --axis: #cfc6bb;
+  --line: rgba(20, 15, 10, 0.14);
+  --grid: #e6ddd0;
+  --axis: #c2b6a6;
 
-  --accent: #d1477e;
-  --accent-soft: #fce7f0;
+  --accent: #d81159;
+  --accent-soft: #ffd9e6;
   --accent-ink: #ffffff;
-  --good: #006300;
+  --good: #008a00;
 
   /* ordinal ramp for the streak heatmap — one hue, light→dark, and the
      lightest used step still clears 2:1 on this surface */
@@ -37,33 +37,33 @@
   --t5: #104281;
   --tier-ink: #ffffff;
 
-  --gold: #c98500;
-  --silver: #8b837b;
-  --bronze: #b4693a;
+  --gold: #d69100;
+  --silver: #948a7f;
+  --bronze: #c06a35;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --plane: #14131a;
-    --plane-2: #1c1622;
-    --surface: #191821;
-    --surface-2: #22212c;
-    --surface-sunken: #12111a;
+    --plane: #0d0b13;
+    --plane-2: #1c1220;
+    --surface: #17141f;
+    --surface-2: #211f2b;
+    --surface-sunken: #0f0d16;
 
-    --ink: #f7f5f2;
-    --ink-2: #c3bfb7;
-    --ink-muted: #8f8a95;
+    --ink: #fdfbf8;
+    --ink-2: #cdc7be;
+    --ink-muted: #948c9c;
 
-    --line: rgba(255, 255, 255, 0.1);
-    --grid: #2c2b36;
-    --axis: #3b3946;
+    --line: rgba(255, 255, 255, 0.14);
+    --grid: #2d2b39;
+    --axis: #423f50;
 
-    --accent: #f08cb4;
-    --accent-soft: #33202c;
-    --accent-ink: #1a1014;
-    --good: #0ca30c;
+    --accent: #ff5f8f;
+    --accent-soft: #3a1526;
+    --accent-ink: #1a0512;
+    --good: #20c220;
 
     --t0: #262530;
     --t1: #184f95;
@@ -73,33 +73,33 @@
     --t5: #9ec5f4;
     --tier-ink: #0d1017;
 
-    --gold: #eda100;
-    --silver: #a9a3ad;
-    --bronze: #d0864f;
+    --gold: #ffb020;
+    --silver: #b6aeb9;
+    --bronze: #e0935c;
   }
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --plane: #14131a;
-  --plane-2: #1c1622;
-  --surface: #191821;
-  --surface-2: #22212c;
-  --surface-sunken: #12111a;
+  --plane: #0d0b13;
+  --plane-2: #1c1220;
+  --surface: #17141f;
+  --surface-2: #211f2b;
+  --surface-sunken: #0f0d16;
 
-  --ink: #f7f5f2;
-  --ink-2: #c3bfb7;
-  --ink-muted: #8f8a95;
+  --ink: #fdfbf8;
+  --ink-2: #cdc7be;
+  --ink-muted: #948c9c;
 
-  --line: rgba(255, 255, 255, 0.1);
-  --grid: #2c2b36;
-  --axis: #3b3946;
+  --line: rgba(255, 255, 255, 0.14);
+  --grid: #2d2b39;
+  --axis: #423f50;
 
-  --accent: #f08cb4;
-  --accent-soft: #33202c;
-  --accent-ink: #1a1014;
-  --good: #0ca30c;
+  --accent: #ff5f8f;
+  --accent-soft: #3a1526;
+  --accent-ink: #1a0512;
+  --good: #20c220;
 
   --t0: #262530;
   --t1: #184f95;
@@ -109,9 +109,9 @@
   --t5: #9ec5f4;
   --tier-ink: #0d1017;
 
-  --gold: #eda100;
-  --silver: #a9a3ad;
-  --bronze: #d0864f;
+  --gold: #ffb020;
+  --silver: #b6aeb9;
+  --bronze: #e0935c;
 }
 
 @theme inline {
@@ -170,7 +170,7 @@ button {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 1.5rem;
-  box-shadow: 0 1px 2px rgba(20, 15, 10, 0.04), 0 8px 24px -12px rgba(20, 15, 10, 0.12);
+  box-shadow: 0 2px 4px rgba(20, 15, 10, 0.06), 0 10px 28px -10px rgba(20, 15, 10, 0.18);
 }
 
 .hairline {

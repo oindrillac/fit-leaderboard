@@ -9,8 +9,6 @@ create table if not exists public.participants (
   emoji text not null
 );
 
--- Shruti isn't in challenge 2.0's roster — left in place rather than deleted so her
--- Aug 15–Sep 15 entries (cascade-deleted otherwise) stay intact for the record.
 insert into public.participants (id, name, emoji) values
   (1,  'Shruti',    '🦋'),
   (2,  'Delilah',   '🌊'),
@@ -25,7 +23,8 @@ insert into public.participants (id, name, emoji) values
   (11, 'Angela',    '🌺'),
   (12, 'Janet',     '🍁'),
   (13, 'Mariola',   '🌙'),
-  (14, 'Roshni',    '✨')
+  (14, 'Roshni',    '✨'),
+  (15, 'Shefali',   '🌷')
 on conflict (id) do update set name = excluded.name, emoji = excluded.emoji;
 
 -- ------------------------------------------------------------- the entries
