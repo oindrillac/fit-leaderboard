@@ -1,6 +1,6 @@
 // The squad. Colors are the validated categorical slots from the data-viz
 // palette (light + dark steps, each mode selected rather than auto-flipped),
-// extended past the base 8 for a 15-person roster and re-validated as a set
+// extended past the base 8 for a 16-person roster and re-validated as a set
 // (scripts/validate_palette.js) in this exact order — reordering the array
 // can reopen an adjacent-pair collision, so append new people at the end.
 // A person's color is fixed to the person, never to their rank — and every
@@ -33,6 +33,7 @@ export const PARTICIPANTS: Participant[] = [
   { id: 10, name: 'Sunita', emoji: '🌻', light: '#a15c2e', dark: '#c17d4a' },
   { id: 9, name: 'Judith', emoji: '🦄', light: '#00897b', dark: '#1fa593' },
   { id: 15, name: 'Shefali', emoji: '🌷', light: '#b8860b', dark: '#ad8118' },
+  { id: 16, name: 'Puspa', emoji: '🪷', light: '#b0228f', dark: '#d04fb3' },
 ]
 
 export const byId = new Map(PARTICIPANTS.map((p) => [p.id, p]))

@@ -24,7 +24,8 @@ insert into public.participants (id, name, emoji) values
   (12, 'Janet',     '🍁'),
   (13, 'Mariola',   '🌙'),
   (14, 'Roshni',    '✨'),
-  (15, 'Shefali',   '🌷')
+  (15, 'Shefali',   '🌷'),
+  (16, 'Puspa',     '🪷')
 on conflict (id) do update set name = excluded.name, emoji = excluded.emoji;
 
 -- ------------------------------------------------------------- the entries
