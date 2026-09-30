@@ -9,22 +9,26 @@ create table if not exists public.participants (
   emoji text not null
 );
 
+-- Shruti isn't in challenge 2.0's roster — left in place rather than deleted so her
+-- Aug 15–Sep 15 entries (cascade-deleted otherwise) stay intact for the record.
 insert into public.participants (id, name, emoji) values
-  (1, 'Shruti',    '🦋'),
-  (2, 'Delilah',   '🌊'),
-  (3, 'Rasika',    '🌿'),
-  (4, 'Sweta',     '☀️'),
-  (5, 'Oindrilla', '🌸'),
-  (6, 'Fatima',    '🍀'),
-  (7, 'Nehali',    '🔮'),
-  (8, 'Sajal',     '⭐')
+  (1,  'Shruti',    '🦋'),
+  (2,  'Delilah',   '🌊'),
+  (3,  'Rasika',    '🌿'),
+  (4,  'Sweta',     '☀️'),
+  (5,  'Oindrilla', '🌸'),
+  (6,  'Fatima',    '🍀'),
+  (7,  'Nehali',    '🔮'),
+  (8,  'Sajal',     '⭐'),
+  (9,  'Judith',    '🦄'),
+  (10, 'Sunita',    '🌻'),
+  (11, 'Angela',    '🌺'),
+  (12, 'Janet',     '🍁'),
+  (13, 'Mariola',   '🌙'),
+  (14, 'Roshni',    '✨')
 on conflict (id) do update set name = excluded.name, emoji = excluded.emoji;
 
 -- ------------------------------------------------------------- the entries
--- Points are computed by the database, so the app and the leaderboard can
--- never disagree about the scoring rules:
---   8k+ = 10, 5k+ = 7, 3k+ = 4, under 3k = 0
---   +5 at 12,000 and another +5 at 20,000, so a 20k day is worth 20.
 
 create table if not exists public.entries (
   participant_id smallint not null references public.participants (id) on delete cascade,
@@ -32,21 +36,31 @@ create table if not exists public.entries (
   steps          integer  not null check (steps >= 0 and steps <= 200000),
   screenshot_url text,
   note           text,
-  points integer generated always as (
-    (case
-       when steps >= 8000 then 10
-       when steps >= 5000 then 7
-       when steps >= 3000 then 4
-       else 0
-     end)
-    + (case when steps >= 12000 then 5 else 0 end)
-    + (case when steps >= 20000 then 5 else 0 end)
-  ) stored,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  primary key (participant_id, day),
-  constraint entries_in_window check (day between date '2026-08-15' and date '2026-09-15')
+  primary key (participant_id, day)
 );
+
+-- Points are computed by the database, so the app and the leaderboard can
+-- never disagree about the scoring rules: 8k+ = 10, 10k+ = 15, 12k+ = 20,
+-- under 8k = 0. A generated column's expression can't be altered in place,
+-- so this drops and re-adds it — safe to re-run whenever the rules change.
+alter table public.entries drop column if exists points;
+alter table public.entries add column points integer generated always as (
+  case
+    when steps >= 12000 then 20
+    when steps >= 10000 then 15
+    when steps >= 8000  then 10
+    else 0
+  end
+) stored;
+
+-- Challenge 2.0's window (Oct 1 – Dec 29, 2026). A plain ALTER so re-running
+-- this script after the dates change actually moves the constraint, since
+-- `create table if not exists` above is a no-op once the table exists.
+alter table public.entries drop constraint if exists entries_in_window;
+alter table public.entries add constraint entries_in_window
+  check (day between date '2026-10-01' and date '2026-12-29');
 
 create index if not exists entries_day_idx on public.entries (day);
 

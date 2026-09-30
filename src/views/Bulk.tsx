@@ -17,7 +17,7 @@ import { key, type Entry, type EntryDraft, type Store } from '../lib/store'
 import type { Mode } from '../lib/theme'
 import Avatar from '../components/Avatar'
 
-/** Parses lines like "Shruti 8,200", "delilah - 5000 steps", "Nehali: 12000". */
+/** Parses lines like "Delilah 8,200", "rasika - 5000 steps", "Nehali: 12000". */
 function parsePaste(text: string): Map<number, number> {
   const out = new Map<number, number>()
   for (const line of text.split(/[\n;]+/)) {
@@ -275,7 +275,7 @@ export default function Bulk({
               value={paste}
               onChange={(e) => setPaste(e.target.value)}
               rows={5}
-              placeholder={'Shruti 8200\nDelilah - 5,400\nNehali: 12000 steps'}
+              placeholder={'Delilah 8200\nRasika - 5,400\nNehali: 12000 steps'}
               className="w-full resize-none rounded-xl bg-[var(--surface-2)] p-3 text-[13px] outline-none"
             />
             <button

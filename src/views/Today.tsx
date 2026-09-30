@@ -1,4 +1,5 @@
-import { dayNumber, fmt, pointsFor, relativeDay, today, TOTAL_DAYS } from '../lib/challenge'
+import { useState } from 'react'
+import { addDays, dayNumber, fmt, isInChallenge, pointsFor, relativeDay, today, TOTAL_DAYS } from '../lib/challenge'
 import { PARTICIPANTS, type Participant } from '../lib/participants'
 import type { Standing } from '../lib/stats'
 import { key, type Entry } from '../lib/store'
@@ -19,7 +20,11 @@ export default function Today({
   me: number | null
   openSheet: (p: Participant, day: string) => void
 }) {
-  const day = today()
+  const t = today()
+  const yesterday = addDays(t, -1)
+  const [day, setDay] = useState(t)
+  const showYesterday = isInChallenge(yesterday)
+
   const rows = PARTICIPANTS.map((p) => ({ p, entry: entries.get(key(p.id, day)) }))
   // You first — everyone else keeps their fixed order so the list never shuffles.
   rows.sort((a, b) => (a.p.id === me ? -1 : b.p.id === me ? 1 : 0))
@@ -31,17 +36,42 @@ export default function Today({
 
   return (
     <div className="space-y-4">
+      {showYesterday && (
+        <div className="flex gap-1.5 rounded-full p-1" style={{ background: 'var(--surface-sunken)' }}>
+          {[
+            { d: t, label: 'Today' },
+            { d: yesterday, label: 'Yesterday' },
+          ].map((opt) => (
+            <button
+              key={opt.d}
+              onClick={() => setDay(opt.d)}
+              aria-pressed={day === opt.d}
+              className="flex-1 rounded-full py-2 text-[13px] font-semibold transition"
+              style={
+                day === opt.d
+                  ? { background: 'var(--surface)', color: 'var(--ink)', boxShadow: '0 1px 3px rgba(0,0,0,.1)' }
+                  : { color: 'var(--ink-muted)' }
+              }
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <section className="card animate-pop p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-[13px] font-semibold uppercase tracking-wide text-accent">
-              Day {dayNumber()} of {TOTAL_DAYS}
+              Day {dayNumber(day)} of {TOTAL_DAYS}
             </p>
             <h1 className="mt-0.5 text-[26px] font-bold leading-tight">{relativeDay(day)}</h1>
           </div>
           <div className="text-right">
             <p className="text-[26px] font-bold leading-none tracking-tight">{fmt(squadSteps)}</p>
-            <p className="mt-1 text-[12px] text-muted">squad steps today</p>
+            <p className="mt-1 text-[12px] text-muted">
+              squad steps {day === t ? 'today' : relativeDay(day).toLowerCase()}
+            </p>
           </div>
         </div>
 
@@ -95,7 +125,7 @@ export default function Today({
                       {entry ? (
                         <span className="tnum">{fmt(steps)} steps</span>
                       ) : (
-                        'Tap to add today'
+                        `Tap to add${day === t ? '' : ` for ${relativeDay(day).toLowerCase()}`}`
                       )}
                       {streak > 1 && <span className="tnum"> · 🔥 {streak}-day streak</span>}
                       {entry?.screenshot_url && ' · 📷'}

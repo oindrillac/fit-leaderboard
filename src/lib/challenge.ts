@@ -1,8 +1,8 @@
 // The challenge window and the scoring rules. Single source of truth for the UI;
 // mirrored by a generated column in supabase/schema.sql so the DB agrees.
 
-export const START_DAY = '2026-08-15'
-export const END_DAY = '2026-09-15'
+export const START_DAY = '2026-10-01'
+export const END_DAY = '2026-12-29'
 
 /** Everyone's "today" flips at midnight IST, wherever they actually are. */
 const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
@@ -28,7 +28,7 @@ export function daysBetween(a: string, b: string): number {
   return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86_400_000)
 }
 
-/** Every day of the challenge, in order. Aug 15 → Sep 15 inclusive = 32 days. */
+/** Every day of the challenge, in order. Oct 1 → Dec 29 inclusive = 90 days. */
 export const ALL_DAYS: string[] = Array.from(
   { length: daysBetween(START_DAY, END_DAY) + 1 },
   (_, i) => addDays(START_DAY, i),
@@ -62,18 +62,19 @@ export type Tier = {
   emoji: string
 }
 
-/** Base tiers, highest first. Bonuses stack on top of these. */
+/** Base tiers, highest first. Everyday count — nothing below 8,000. */
 export const TIERS: Tier[] = [
-  { key: 'huge', label: 'Huge day', blurb: '20,000+', min: 20000, points: 20, emoji: '🚀' },
-  { key: 'big', label: 'Big day', blurb: '12,000+', min: 12000, points: 15, emoji: '🔥' },
-  { key: 'great', label: 'Nailed it', blurb: '8,000+', min: 8000, points: 10, emoji: '💪' },
-  { key: 'solid', label: 'Solid day', blurb: '5,000–7,999', min: 5000, points: 7, emoji: '👏' },
-  { key: 'something', label: 'Something', blurb: '3,000–4,999', min: 3000, points: 4, emoji: '🙂' },
-  { key: 'none', label: 'Rest day', blurb: 'Under 3,000', min: 0, points: 0, emoji: '😴' },
+  { key: 'big', label: 'Big day', blurb: '12,000+', min: 12000, points: 20, emoji: '🔥' },
+  { key: 'great', label: 'Nailed it', blurb: '10,000+', min: 10000, points: 15, emoji: '💪' },
+  { key: 'solid', label: 'Solid day', blurb: '8,000+', min: 8000, points: 10, emoji: '👏' },
+  { key: 'none', label: 'Rest day', blurb: 'Under 8,000', min: 0, points: 0, emoji: '😴' },
 ]
 
 /** Whoever logs the most total steps across the whole window gets this, once it's over. */
 export const STEP_CHAMPION_BONUS = 15
+
+/** Whoever logs the most total steps in a calendar month gets this, once that month is over. */
+export const MONTHLY_CHAMPION_BONUS = 10
 
 /** True the day after the challenge window closes — the bonus locks in then. */
 export function isChallengeComplete(): boolean {
@@ -82,17 +83,13 @@ export function isChallengeComplete(): boolean {
 
 export const MAX_DAILY_POINTS = 20
 
-/**
- * 8k+ = 10, 5k+ = 7, 3k+ = 4, else 0.
- * +5 at 12,000 (big day) and another +5 at 20,000 (huge day),
- * so 20k lands on 20 points.
- */
+/** 8k+ = 10, 10k+ = 15, 12k+ = 20, else 0. */
 export function pointsFor(steps: number): number {
   if (!Number.isFinite(steps) || steps <= 0) return 0
-  let p = steps >= 8000 ? 10 : steps >= 5000 ? 7 : steps >= 3000 ? 4 : 0
-  if (steps >= 12000) p += 5
-  if (steps >= 20000) p += 5
-  return p
+  if (steps >= 12000) return 20
+  if (steps >= 10000) return 15
+  if (steps >= 8000) return 10
+  return 0
 }
 
 export function tierFor(steps: number): Tier {
@@ -101,10 +98,37 @@ export function tierFor(steps: number): Tier {
 
 /** How many more steps to reach the next scoring tier, or null at the top. */
 export function nextTier(steps: number): { steps: number; points: number } | null {
-  const ladder = [3000, 5000, 8000, 12000, 20000]
+  const ladder = [8000, 10000, 12000]
   const next = ladder.find((n) => steps < n)
   if (next === undefined) return null
   return { steps: next - steps, points: pointsFor(next) - pointsFor(steps) }
+}
+
+// ------------------------------------------------------------ monthly bonus
+
+export type MonthWindow = { key: string; label: string; days: string[] }
+
+/** The challenge window split into calendar months — Oct, Nov, Dec. */
+export const MONTHS: MonthWindow[] = (() => {
+  const byMonth = new Map<string, string[]>()
+  for (const d of ALL_DAYS) {
+    const k = d.slice(0, 7)
+    if (!byMonth.has(k)) byMonth.set(k, [])
+    byMonth.get(k)!.push(d)
+  }
+  return [...byMonth.entries()].map(([monthKey, days]) => ({
+    key: monthKey,
+    label: new Date(monthKey + '-01T00:00:00Z').toLocaleDateString('en-US', {
+      timeZone: 'UTC',
+      month: 'long',
+    }),
+    days,
+  }))
+})()
+
+/** True the day after a given month's slice of the challenge ends — its bonus locks in then. */
+export function isMonthComplete(month: MonthWindow): boolean {
+  return today() > month.days[month.days.length - 1]
 }
 
 // ---------------------------------------------------------------- formatting

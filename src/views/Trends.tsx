@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { fmt, prettyDay } from '../lib/challenge'
+import { fmt, prettyDay, START_DAY } from '../lib/challenge'
 import { PARTICIPANTS } from '../lib/participants'
 import { cumulativeSeries, dailyTotals, squadStats, type Standing } from '../lib/stats'
 import type { Entry } from '../lib/store'
@@ -77,7 +77,7 @@ export default function Trends({
       <section className="card p-4">
         <div className="mb-1 flex items-baseline justify-between gap-2">
           <h2 className="text-[15px] font-bold">Streak grid</h2>
-          <span className="text-[11.5px] text-muted">Aug 15 → today</span>
+          <span className="text-[11.5px] text-muted">{prettyDay(START_DAY)} → today</span>
         </div>
         <p className="mb-3 text-[12.5px] text-muted">Every day, darker means a bigger day</p>
 

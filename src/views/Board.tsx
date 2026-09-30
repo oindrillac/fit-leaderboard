@@ -1,5 +1,13 @@
 import { useMemo, useState } from 'react'
-import { elapsedDays, fmt, isChallengeComplete, STEP_CHAMPION_BONUS, today } from '../lib/challenge'
+import {
+  ALL_DAYS,
+  elapsedDays,
+  fmt,
+  isChallengeComplete,
+  MONTHLY_CHAMPION_BONUS,
+  STEP_CHAMPION_BONUS,
+  today,
+} from '../lib/challenge'
 import { buildStandings } from '../lib/stats'
 import type { Entry } from '../lib/store'
 import type { Mode } from '../lib/theme'
@@ -8,7 +16,7 @@ import Avatar from '../components/Avatar'
 type Range = 'all' | 'week' | 'today'
 
 const RANGES: { key: Range; label: string }[] = [
-  { key: 'all', label: 'All 32 days' },
+  { key: 'all', label: `All ${ALL_DAYS.length} days` },
   { key: 'week', label: 'Last 7' },
   { key: 'today', label: 'Today' },
 ]
@@ -39,6 +47,25 @@ export default function Board({
   const podiumOrder = [podium[1], podium[0], podium[2]].filter(Boolean)
   const leaderPoints = standings[0]?.points ?? 0
   const champions = range === 'all' ? standings.filter((s) => s.stepChampion) : []
+
+  // Group monthly leaders by month, so Oct/Nov/Dec each get their own line.
+  const monthlyLeaders =
+    range === 'all'
+      ? (() => {
+          const byMonth = new Map<
+            string,
+            { label: string; complete: boolean; leaders: typeof standings }
+          >()
+          for (const s of standings) {
+            for (const m of s.monthlyChampionships) {
+              const entry = byMonth.get(m.key) ?? { label: m.label, complete: m.complete, leaders: [] }
+              entry.leaders.push(s)
+              byMonth.set(m.key, entry)
+            }
+          }
+          return [...byMonth.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, v]) => v)
+        })()
+      : []
 
   return (
     <div className="space-y-4">
@@ -72,11 +99,28 @@ export default function Board({
             </p>
             <p className="text-[12px] text-muted tnum">
               {fmt(champions[0].steps)} steps · +{STEP_CHAMPION_BONUS} bonus{' '}
-              {isChallengeComplete() ? 'awarded' : 'if it holds through Sep 15'}
+              {isChallengeComplete() ? 'awarded' : 'if it holds through Dec 29'}
             </p>
           </div>
         </section>
       )}
+
+      {monthlyLeaders.map((m) => (
+        <section key={m.label} className="card animate-pop flex items-center gap-3 p-4">
+          <span className="text-2xl" aria-hidden="true">
+            📅
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13.5px] font-bold leading-tight">
+              {m.leaders.map((c) => c.participant.name).join(' & ')}{' '}
+              {m.leaders.length > 1 ? 'are' : 'is'} leading {m.label}
+            </p>
+            <p className="text-[12px] text-muted tnum">
+              +{MONTHLY_CHAMPION_BONUS} bonus {m.complete ? 'awarded' : `if it holds through ${m.label}`}
+            </p>
+          </div>
+        </section>
+      ))}
 
       {!anyPoints ? (
         <section className="card animate-pop p-8 text-center">

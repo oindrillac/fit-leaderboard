@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { msUntilNextDay, pointsFor } from './lib/challenge'
+import { ALL_DAYS, msUntilNextDay, pointsFor } from './lib/challenge'
 import { PARTICIPANTS, participant, type Participant } from './lib/participants'
 import { buildStandings } from './lib/stats'
 import { useStore } from './lib/store'
@@ -204,7 +204,7 @@ function NamePicker({ onPick, mode }: { onPick: (id: number) => void; mode: 'lig
         </p>
         <h1 className="mt-3 text-[30px] font-bold leading-tight tracking-tight">Step Squad</h1>
         <p className="mt-1.5 text-[14px] text-ink-2">
-          32 days, {PARTICIPANTS.length} of us, one leaderboard. Aug 15 → Sep 15.
+          {ALL_DAYS.length} days, {PARTICIPANTS.length} of us, one leaderboard. Oct 1 → Dec 29.
         </p>
         <p className="mt-6 text-[13px] font-semibold uppercase tracking-wide text-muted">
           Who are you?

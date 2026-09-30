@@ -1,4 +1,14 @@
-import { ALL_DAYS, elapsedDays, isChallengeComplete, pointsFor, STEP_CHAMPION_BONUS, today } from './challenge'
+import {
+  ALL_DAYS,
+  elapsedDays,
+  isChallengeComplete,
+  isMonthComplete,
+  MONTHLY_CHAMPION_BONUS,
+  MONTHS,
+  pointsFor,
+  STEP_CHAMPION_BONUS,
+  today,
+} from './challenge'
 import { PARTICIPANTS, type Participant } from './participants'
 import { key, type Entry } from './store'
 
@@ -23,6 +33,19 @@ export type Standing = {
   rank: number
   /** Currently has (one of) the most total steps in the full-window standings. */
   stepChampion: boolean
+  /** Calendar months where they currently lead (or have locked in) the most steps. */
+  monthlyChampionships: { key: string; label: string; complete: boolean }[]
+}
+
+/** A participant's total steps across a specific set of days — independent of
+ *  whatever slice of days the standings table itself is showing. */
+function stepsInDays(entries: Map<string, Entry>, participantId: number, days: string[]): number {
+  let total = 0
+  for (const day of days) {
+    const e = entries.get(key(participantId, day))
+    if (e) total += e.steps
+  }
+  return total
 }
 
 /** A day counts toward a streak if it actually scored. 2,000 steps is a gap. */
@@ -86,6 +109,7 @@ export function buildStandings(
       cells,
       rank: 0,
       stepChampion: false,
+      monthlyChampionships: [] as Standing['monthlyChampionships'],
     }
   })
 
@@ -99,6 +123,26 @@ export function buildStandings(
         if (r.steps === maxSteps) {
           r.stepChampion = true
           if (isChallengeComplete()) r.points += STEP_CHAMPION_BONUS
+        }
+      }
+    }
+
+    // Same idea, one month at a time — each calendar month has its own max-steps
+    // bonus, based on that month's own days (not whatever slice the table shows).
+    for (const month of MONTHS) {
+      const elapsed = month.days.filter((d) => d <= today())
+      if (elapsed.length === 0) continue
+      const totals = rows.map((r) => ({
+        row: r,
+        steps: stepsInDays(entries, r.participant.id, elapsed),
+      }))
+      const maxMonthSteps = Math.max(0, ...totals.map((t) => t.steps))
+      if (maxMonthSteps === 0) continue
+      const complete = isMonthComplete(month)
+      for (const t of totals) {
+        if (t.steps === maxMonthSteps) {
+          t.row.monthlyChampionships.push({ key: month.key, label: month.label, complete })
+          if (complete) t.row.points += MONTHLY_CHAMPION_BONUS
         }
       }
     }
