@@ -60,9 +60,13 @@ alter table public.entries add column points integer generated always as (
 -- Challenge 2.0's window (Oct 1 – Dec 29, 2026). A plain ALTER so re-running
 -- this script after the dates change actually moves the constraint, since
 -- `create table if not exists` above is a no-op once the table exists.
+-- `not valid` skips checking existing rows — Shruti's Aug 15–Sep 15 entries
+-- from the first challenge stay as historical record instead of blocking this
+-- migration — while still enforcing the new window on every insert/update
+-- from here on.
 alter table public.entries drop constraint if exists entries_in_window;
 alter table public.entries add constraint entries_in_window
-  check (day between date '2026-10-01' and date '2026-12-29');
+  check (day between date '2026-10-01' and date '2026-12-29') not valid;
 
 create index if not exists entries_day_idx on public.entries (day);
 
