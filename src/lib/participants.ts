@@ -1,6 +1,6 @@
 // The squad. Colors are the validated categorical slots from the data-viz
 // palette (light + dark steps, each mode selected rather than auto-flipped),
-// extended past the base 8 for an 18-person roster and re-validated as a set
+// extended past the base 8 for a 17-person roster and re-validated as a set
 // (scripts/validate_palette.js) in this exact order — reordering the array
 // can reopen an adjacent-pair collision, so append new people at the end.
 // A person's color is fixed to the person, never to their rank — and every
@@ -18,7 +18,6 @@ export type Participant = {
 }
 
 export const PARTICIPANTS: Participant[] = [
-  { id: 1, name: 'Shruti', emoji: '🦋', light: '#2a78d6', dark: '#3987e5' },
   { id: 2, name: 'Delilah', emoji: '🌊', light: '#eb6834', dark: '#d95926' },
   { id: 3, name: 'Rasika', emoji: '🌿', light: '#1baf7a', dark: '#199e70' },
   { id: 4, name: 'Sweta', emoji: '☀️', light: '#eda100', dark: '#c98500' },
@@ -34,7 +33,7 @@ export const PARTICIPANTS: Participant[] = [
   { id: 9, name: 'Judith', emoji: '🦄', light: '#00897b', dark: '#1fa593' },
   { id: 15, name: 'Shefali', emoji: '🌷', light: '#b8860b', dark: '#ad8118' },
   { id: 16, name: 'Puspa', emoji: '🪷', light: '#b0228f', dark: '#d04fb3' },
-  { id: 17, name: 'Shweta', emoji: '🕊️', light: '#9c4221', dark: '#c2642f' },
+  { id: 19, name: 'Piki', emoji: '🦚', light: '#9c4221', dark: '#c2642f' },
   { id: 18, name: 'Sarika', emoji: '🐚', light: '#3d6ea5', dark: '#4d85c9' },
 ]
 

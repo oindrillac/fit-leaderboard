@@ -26,9 +26,13 @@ insert into public.participants (id, name, emoji) values
   (14, 'Roshni',    '✨'),
   (15, 'Shefali',   '🌷'),
   (16, 'Puspa',     '🪷'),
-  (17, 'Shweta',    '🕊️'),
-  (18, 'Sarika',    '🐚')
+  (18, 'Sarika',    '🐚'),
+  (19, 'Piki',      '🦚')
 on conflict (id) do update set name = excluded.name, emoji = excluded.emoji;
+-- Shruti (1) and Shweta (17) aren't in the roster anymore, but their rows and
+-- any entries stay put — same reasoning as the Shruti note used to say:
+-- removing a participant row would cascade-delete their logged entries, so
+-- the app just stops listing them instead.
 
 -- ------------------------------------------------------------- the entries
 
