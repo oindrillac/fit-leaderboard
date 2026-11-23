@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SCREENSHOT_BUCKET, supabase } from './supabase'
 import { blobToDataUrl, compressImage } from './image'
+import { END_DAY, START_DAY } from './challenge'
 
 export type Entry = {
   participant_id: number
@@ -90,11 +91,27 @@ const localBackend: Backend = {
 const remoteBackend: Backend = {
   mode: 'shared',
   async list() {
-    const { data, error } = await supabase!
-      .from('entries')
-      .select('participant_id, day, steps, screenshot_url, note')
-    if (error) throw error
-    return (data ?? []) as Entry[]
+    // Supabase caps every response at 1,000 rows, so a single select silently
+    // drops the newest entries once the table grows past that. Page through
+    // with a stable order until a short page says we've got everything, and
+    // only ask for this challenge's window (older challenges' rows stay in the
+    // DB as history but don't count against the app's reads).
+    const PAGE = 1000
+    const all: Entry[] = []
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await supabase!
+        .from('entries')
+        .select('participant_id, day, steps, screenshot_url, note')
+        .gte('day', START_DAY)
+        .lte('day', END_DAY)
+        .order('day', { ascending: true })
+        .order('participant_id', { ascending: true })
+        .range(from, from + PAGE - 1)
+      if (error) throw error
+      const rows = (data ?? []) as Entry[]
+      all.push(...rows)
+      if (rows.length < PAGE) return all
+    }
   },
   async upsert(drafts) {
     const { error } = await supabase!
